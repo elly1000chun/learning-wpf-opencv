@@ -19,7 +19,8 @@ OpenCV, WPF, MVVM 패턴을 학습하기 위한 데스크톱 이미지 처리 �
 - `Super Resolution` 버튼을 통해 현재 표시 이미지에 AI 기반 Super Resolution 적용
 
 ## 화면 구성
-<img width="1572" height="1186" alt="스크린샷 2026-09-02 150837" src="https://github.com/user-attachments/assets/a10d6cce-5d71-4299-a4af-3921880f1880" />
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/a3d28a6a-6547-475a-ac69-c48393e376c3" />
+
 
 
 ## 빌드 방법
