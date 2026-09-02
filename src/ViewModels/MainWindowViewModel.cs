@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using learning_wpf_opencv.Services;
 using System;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Diagnostics;
@@ -17,6 +18,7 @@ public sealed class MainWindowViewModel : ObservableObject
     private string openedFilePath = string.Empty;
     private ImageSource? openedImage;
     private ImageSource? displayingImage;
+    private bool isProcessing;
 
     public MainWindowViewModel(
         IFileDialogService fileDialogService,
@@ -29,9 +31,9 @@ public sealed class MainWindowViewModel : ObservableObject
         this.imageLoaderService = imageLoaderService;
         this.imageProcessingService = imageProcessingService;
 
-        OpenFileCommand = new RelayCommand(OpenFile);
-        SmoothCommand = new RelayCommand(Smooth);
-        SuperResolutionCommand = new RelayCommand(SuperResolution);
+        OpenFileCommand = new RelayCommand(OpenFile, () => IsNotProcessing);
+        SmoothCommand = new RelayCommand(Smooth, () => IsNotProcessing && OpenedImage != null);
+        SuperResolutionCommand = new AsyncRelayCommand(SuperResolutionAsync, () => IsNotProcessing && OpenedImage != null);
     }
 
     public string OpenedFilePath
@@ -43,19 +45,44 @@ public sealed class MainWindowViewModel : ObservableObject
     public ImageSource? OpenedImage
     {
         get => openedImage;
-        private set => SetProperty(ref openedImage, value);
+        private set
+        {
+            if (SetProperty(ref openedImage, value))
+            {
+                SmoothCommand.NotifyCanExecuteChanged();
+                SuperResolutionCommand.NotifyCanExecuteChanged();
+            }
+        }
     }
+
     public ImageSource? DisplayingImage
     {
         get => displayingImage;
         private set => SetProperty(ref displayingImage, value);
     }
 
+    public bool IsProcessing
+    {
+        get => isProcessing;
+        private set
+        {
+            if (SetProperty(ref isProcessing, value))
+            {
+                OnPropertyChanged(nameof(IsNotProcessing));
+                OpenFileCommand.NotifyCanExecuteChanged();
+                SmoothCommand.NotifyCanExecuteChanged();
+                SuperResolutionCommand.NotifyCanExecuteChanged();
+            }
+        }
+    }
+
+    public bool IsNotProcessing => !IsProcessing;
+
     public IRelayCommand OpenFileCommand { get; }
 
     public IRelayCommand SmoothCommand { get; }
 
-    public IRelayCommand SuperResolutionCommand { get; }
+    public IAsyncRelayCommand SuperResolutionCommand { get; }
 
     private void OpenFile()
     {
@@ -94,7 +121,7 @@ public sealed class MainWindowViewModel : ObservableObject
         }
     }
 
-    private void SuperResolution()
+    private async Task SuperResolutionAsync()
     {
         Debug.WriteLine(MethodBase.GetCurrentMethod());
 
@@ -105,7 +132,8 @@ public sealed class MainWindowViewModel : ObservableObject
 
         try
         {
-            DisplayingImage = imageProcessingService.ApplySuperResolution(OpenedImage);
+            IsProcessing = true;
+            DisplayingImage = await Task.Run(() => imageProcessingService.ApplySuperResolution(OpenedImage));
         }
         catch (Exception exception)
         {
@@ -114,6 +142,10 @@ public sealed class MainWindowViewModel : ObservableObject
                 "Super Resolution Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsProcessing = false;
         }
     }
 }

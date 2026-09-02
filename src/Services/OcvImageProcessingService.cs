@@ -17,7 +17,10 @@ public sealed class OcvImageProcessingService : IImageProcessingService
         var dstGaussian = new Mat();
         Cv2.GaussianBlur(ImageSourceToMat(input), dstGaussian, new OpenCvSharp.Size(sigma, sigma), 0);
 
-        return dstGaussian.ToBitmapSource();
+        var imageSource = dstGaussian.ToBitmapSource();
+        imageSource.Freeze();
+
+        return imageSource;
     }
 
     public ImageSource ApplySuperResolution(ImageSource input)
@@ -40,7 +43,10 @@ public sealed class OcvImageProcessingService : IImageProcessingService
         using Mat result = new Mat();
         sr.Upsample(ImageSourceToMat(input), result);
 
-        return result.ToBitmapSource();
+        var imageSource = result.ToBitmapSource();
+        imageSource.Freeze();
+
+        return imageSource;
     }
 
     public static Mat ImageSourceToMat(ImageSource imageSource)

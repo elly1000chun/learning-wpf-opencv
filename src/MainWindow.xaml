@@ -9,6 +9,10 @@
         Width="800"
         MinHeight="600"
         MinWidth="800">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
+
     <Grid Margin="12">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -27,6 +31,7 @@
                     Height="30"
                     Margin="0,0,8,0"
                     Command="{Binding OpenFileCommand}"
+                    IsEnabled="{Binding IsNotProcessing}"
                     Content="Open File"/>
 
             <TextBox Grid.Column="1"
@@ -77,6 +82,56 @@
                 <Image Source="{Binding DisplayingImage}"
                        Stretch="Uniform"/>
             </Border>
+
+            <Grid Grid.Row="0"
+                  Grid.RowSpan="2"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="3"
+                  Background="#80000000"
+                  Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                    <Viewbox Width="48"
+                             Height="48"
+                             HorizontalAlignment="Center">
+                        <Grid Width="48"
+                              Height="48"
+                              RenderTransformOrigin="0.5,0.5">
+                            <Grid.RenderTransform>
+                                <RotateTransform/>
+                            </Grid.RenderTransform>
+                            <Grid.Triggers>
+                                <EventTrigger RoutedEvent="Loaded">
+                                    <BeginStoryboard>
+                                        <Storyboard RepeatBehavior="Forever">
+                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                                                             From="0"
+                                                             To="360"
+                                                             Duration="0:0:1"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Grid.Triggers>
+                            <Ellipse Width="38"
+                                     Height="38"
+                                     Stroke="#FFFFFF"
+                                     StrokeThickness="4"
+                                     Opacity="0.35"/>
+                            <Path Data="M24,5 A19,19 0 0 1 43,24"
+                                  Stroke="#FFFFFF"
+                                  StrokeThickness="4"
+                                  StrokeStartLineCap="Round"
+                                  StrokeEndLineCap="Round"/>
+                        </Grid>
+                    </Viewbox>
+
+                    <TextBlock Margin="0,12,0,0"
+                               HorizontalAlignment="Center"
+                               Foreground="White"
+                               FontWeight="SemiBold"
+                               Text="Processing..."/>
+                </StackPanel>
+            </Grid>
         </Grid>
 
         <StackPanel Grid.Row="2"
@@ -86,11 +141,13 @@
                     Height="30"
                     Margin="0,0,8,0"
                     Command="{Binding SmoothCommand}"
+                    IsEnabled="{Binding IsNotProcessing}"
                     Content="Smooth"/>
 
             <Button Width="140"
                     Height="30"
                     Command="{Binding SuperResolutionCommand}"
+                    IsEnabled="{Binding IsNotProcessing}"
                     Content="Super Resolution"/>
         </StackPanel>
     </Grid>
