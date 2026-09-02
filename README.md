@@ -18,6 +18,7 @@ OpenCV, WPF, MVVM 패턴을 학습하기 위한 데스크톱 이미지 처리 �
 - `Smooth` 버튼을 통해 현재 표시 이미지에 Gaussian Blur 적용
 
 ## 화면 구성
+<img width="1570" height="1182" alt="image" src="https://github.com/user-attachments/assets/b4cdc764-6e65-41dd-9427-3fd88f1b7024" />
 
 
 ## 빌드 방법
