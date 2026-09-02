@@ -5,6 +5,7 @@ using OpenCvSharp.WpfExtensions;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.IO;
 
 namespace learning_wpf_opencv.Services;
 
@@ -21,7 +22,12 @@ public sealed class OcvImageProcessingService : IImageProcessingService
 
     public ImageSource ApplySuperResolution(ImageSource input)
     {
-        string modelPath = "EDSR_x4.pb"; // 다운로드한 모델 경로
+        // 다운로드한 AI 모델 경로
+        string modelPath = Path.Combine(
+                AppContext.BaseDirectory,
+                "resources",
+                "models",
+                "EDSR_x4.pb");
         string modelName = "edsr";       // 모델 이름 ("edsr", "espcn", "fsrcnn", "lapsrn")
         int scale = 4;                   // 확대 배율
 

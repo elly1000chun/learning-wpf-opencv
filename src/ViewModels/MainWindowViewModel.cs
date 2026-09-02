@@ -13,21 +13,25 @@ public sealed class MainWindowViewModel : ObservableObject
 {
     private readonly IFileDialogService fileDialogService;
     private readonly IImageLoaderService imageLoaderService;
+    private readonly IImageProcessingService imageProcessingService;
     private string openedFilePath = string.Empty;
     private ImageSource? openedImage;
     private ImageSource? displayingImage;
 
     public MainWindowViewModel(
         IFileDialogService fileDialogService,
-        IImageLoaderService imageLoaderService)
+        IImageLoaderService imageLoaderService,
+        IImageProcessingService imageProcessingService)
     {
         Debug.WriteLine(MethodBase.GetCurrentMethod());
 
         this.fileDialogService = fileDialogService;
         this.imageLoaderService = imageLoaderService;
+        this.imageProcessingService = imageProcessingService;
 
         OpenFileCommand = new RelayCommand(OpenFile);
         SmoothCommand = new RelayCommand(Smooth);
+        SuperResolutionCommand = new RelayCommand(SuperResolution);
     }
 
     public string OpenedFilePath
@@ -50,6 +54,8 @@ public sealed class MainWindowViewModel : ObservableObject
     public IRelayCommand OpenFileCommand { get; }
 
     public IRelayCommand SmoothCommand { get; }
+
+    public IRelayCommand SuperResolutionCommand { get; }
 
     private void OpenFile()
     {
@@ -81,10 +87,33 @@ public sealed class MainWindowViewModel : ObservableObject
     private void Smooth()
     {
         Debug.WriteLine(MethodBase.GetCurrentMethod());
-        var ips = new OcvImageProcessingService();
 
-        if (OpenedImage != null) {
-            DisplayingImage = ips.Smooth(OpenedImage, 9);
+        if (OpenedImage != null)
+        {
+            DisplayingImage = imageProcessingService.Smooth(OpenedImage, 9);
+        }
+    }
+
+    private void SuperResolution()
+    {
+        Debug.WriteLine(MethodBase.GetCurrentMethod());
+
+        if (OpenedImage == null)
+        {
+            return;
+        }
+
+        try
+        {
+            DisplayingImage = imageProcessingService.ApplySuperResolution(OpenedImage);
+        }
+        catch (Exception exception)
+        {
+            MessageBox.Show(
+                exception.Message,
+                "Super Resolution Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
         }
     }
 }

@@ -14,7 +14,8 @@ namespace learning_wpf_opencv
             InitializeComponent();
             DataContext = new MainWindowViewModel(
                 new FileDialogService(),
-                new OpenCvImageLoaderService());
+                new OpenCvImageLoaderService(),
+                new OcvImageProcessingService());
         }
     }
 }

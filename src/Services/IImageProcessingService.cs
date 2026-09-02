@@ -7,4 +7,6 @@ namespace learning_wpf_opencv.Services;
 public interface IImageProcessingService
 {
     ImageSource Smooth(ImageSource input, int sigma);
+
+    ImageSource ApplySuperResolution(ImageSource input);
 }
