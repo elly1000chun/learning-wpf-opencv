@@ -20,10 +20,9 @@ OpenCV, WPF, MVVM 패턴을 학습하기 위한 데스크톱 이미지 처리 �
 ## 화면 구성
 <img width="1570" height="1182" alt="image" src="https://github.com/user-attachments/assets/b4cdc764-6e65-41dd-9427-3fd88f1b7024" />
 
-
 ## 빌드 방법
 
-터미널에서 프로젝트 폴더로 이동한 뒤 다음 명령을 실행합니다.
+터미널에서 루트 폴더로 이동한 뒤 다음 명령을 실행합니다.
 
 ```powershell
 dotnet build
@@ -36,7 +35,7 @@ Visual Studio에서는 솔루션 또는 프로젝트를 연 뒤 `Build > Build S
 터미널에서 다음 명령을 실행합니다.
 
 ```powershell
-dotnet run
+dotnet run --project .\src\learning-wpf-opencv.csproj
 ```
 
 Visual Studio에서는 `F5` 또는 `Ctrl + F5`로 실행할 수 있습니다.

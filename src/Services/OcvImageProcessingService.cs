@@ -1,4 +1,5 @@
 ﻿using OpenCvSharp;
+using OpenCvSharp.DnnSuperres;
 using OpenCvSharp.WpfExtensions;
 
 using System.Windows;
@@ -16,6 +17,24 @@ public sealed class OcvImageProcessingService : IImageProcessingService
         Cv2.GaussianBlur(ImageSourceToMat(input), dstGaussian, new OpenCvSharp.Size(sigma, sigma), 0);
 
         return dstGaussian.ToBitmapSource();
+    }
+
+    public ImageSource ApplySuperResolution(ImageSource input)
+    {
+        string modelPath = "EDSR_x4.pb"; // 다운로드한 모델 경로
+        string modelName = "edsr";       // 모델 이름 ("edsr", "espcn", "fsrcnn", "lapsrn")
+        int scale = 4;                   // 확대 배율
+
+        // 2. 슈퍼 해상도 객체 생성 및 설정
+        using var sr = new DnnSuperResImpl();
+        sr.ReadModel(modelPath);
+        sr.SetModel(modelName, scale);
+
+        // 3. 업스케일링 수행
+        using Mat result = new Mat();
+        sr.Upsample(ImageSourceToMat(input), result);
+
+        return result.ToBitmapSource();
     }
 
     public static Mat ImageSourceToMat(ImageSource imageSource)
