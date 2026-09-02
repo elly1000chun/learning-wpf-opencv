@@ -15,10 +15,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\resources\models\EDSR_x4.pb">
-      <Link>resources\models\EDSR_x4.pb</Link>
+    <Content Include="..\resources\EDSR_Tensorflow\models\EDSR_x4.pb">
+      <Link>resources\EDSR_Tensorflow\models\EDSR_x4.pb</Link>
+
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
+
+
+
+
+
+
+
+
 
 </Project>

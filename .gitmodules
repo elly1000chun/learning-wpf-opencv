@@ -1,0 +1,3 @@
+[submodule "resources/EDSR_Tensorflow"]
+	path = resources/EDSR_Tensorflow
+	url = https://github.com/Saafke/EDSR_Tensorflow.git

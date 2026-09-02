@@ -22,10 +22,10 @@ public sealed class OcvImageProcessingService : IImageProcessingService
 
     public ImageSource ApplySuperResolution(ImageSource input)
     {
-        // 다운로드한 AI 모델 경로
         string modelPath = Path.Combine(
                 AppContext.BaseDirectory,
                 "resources",
+                "EDSR_Tensorflow",
                 "models",
                 "EDSR_x4.pb");
         string modelName = "edsr";       // 모델 이름 ("edsr", "espcn", "fsrcnn", "lapsrn")
