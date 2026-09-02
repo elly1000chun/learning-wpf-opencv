@@ -41,7 +41,7 @@
                 BorderBrush="#C8C8C8"
                 BorderThickness="1"
                 Background="#F7F7F7">
-            <Image Source="{Binding OpenedImage}"
+            <Image Source="{Binding DisplayingImage}"
                    Stretch="Uniform"/>
         </Border>
 

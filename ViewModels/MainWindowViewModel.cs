@@ -1,9 +1,11 @@
-using System;
-using System.Windows;
-using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using learning_wpf_opencv.Services;
+using System;
+using System.Reflection;
+using System.Windows;
+using System.Windows.Media;
+using System.Diagnostics;
 
 namespace learning_wpf_opencv.ViewModels;
 
@@ -13,11 +15,14 @@ public sealed class MainWindowViewModel : ObservableObject
     private readonly IImageLoaderService imageLoaderService;
     private string openedFilePath = string.Empty;
     private ImageSource? openedImage;
+    private ImageSource? displayingImage;
 
     public MainWindowViewModel(
         IFileDialogService fileDialogService,
         IImageLoaderService imageLoaderService)
     {
+        Debug.WriteLine(MethodBase.GetCurrentMethod());
+
         this.fileDialogService = fileDialogService;
         this.imageLoaderService = imageLoaderService;
 
@@ -36,6 +41,11 @@ public sealed class MainWindowViewModel : ObservableObject
         get => openedImage;
         private set => SetProperty(ref openedImage, value);
     }
+    public ImageSource? DisplayingImage
+    {
+        get => displayingImage;
+        private set => SetProperty(ref displayingImage, value);
+    }
 
     public IRelayCommand OpenFileCommand { get; }
 
@@ -43,6 +53,8 @@ public sealed class MainWindowViewModel : ObservableObject
 
     private void OpenFile()
     {
+        Debug.WriteLine(MethodBase.GetCurrentMethod());
+
         var filePath = fileDialogService.ShowOpenImageFileDialog();
 
         if (string.IsNullOrWhiteSpace(filePath))
@@ -54,6 +66,7 @@ public sealed class MainWindowViewModel : ObservableObject
         {
             OpenedFilePath = filePath;
             OpenedImage = imageLoaderService.LoadImage(filePath);
+            DisplayingImage = OpenedImage;
         }
         catch (Exception exception)
         {
@@ -65,7 +78,13 @@ public sealed class MainWindowViewModel : ObservableObject
         }
     }
 
-    private static void Smooth()
+    private void Smooth()
     {
+        Debug.WriteLine(MethodBase.GetCurrentMethod());
+        var ips = new OcvImageProcessingService();
+
+        if (OpenedImage != null) {
+            DisplayingImage = ips.Smooth(OpenedImage, 9);
+        }
     }
 }
