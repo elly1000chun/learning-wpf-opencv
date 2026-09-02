@@ -36,14 +36,48 @@
                      Text="{Binding OpenedFilePath, Mode=OneWay}"/>
         </Grid>
 
-        <Border Grid.Row="1"
-                Margin="0,12"
-                BorderBrush="#C8C8C8"
-                BorderThickness="1"
-                Background="#F7F7F7">
-            <Image Source="{Binding DisplayingImage}"
-                   Stretch="Uniform"/>
-        </Border>
+        <Grid Grid.Row="1"
+              Margin="0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="12"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0"
+                   Grid.Column="0"
+                   Padding="0,0,0,6"
+                   FontWeight="SemiBold"
+                   Content="Original"/>
+
+            <Label Grid.Row="0"
+                   Grid.Column="2"
+                   Padding="0,0,0,6"
+                   FontWeight="SemiBold"
+                   Content="Result"/>
+
+            <Border Grid.Row="1"
+                    Grid.Column="0"
+                    BorderBrush="#C8C8C8"
+                    BorderThickness="1"
+                    Background="#F7F7F7">
+                <Image Source="{Binding OpenedImage}"
+                       Stretch="Uniform"/>
+            </Border>
+
+            <Border Grid.Row="1"
+                    Grid.Column="2"
+                    BorderBrush="#C8C8C8"
+                    BorderThickness="1"
+                    Background="#F7F7F7">
+                <Image Source="{Binding DisplayingImage}"
+                       Stretch="Uniform"/>
+            </Border>
+        </Grid>
 
         <StackPanel Grid.Row="2"
                     Orientation="Horizontal"

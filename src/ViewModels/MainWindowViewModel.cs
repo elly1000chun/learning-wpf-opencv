@@ -72,7 +72,7 @@ public sealed class MainWindowViewModel : ObservableObject
         {
             OpenedFilePath = filePath;
             OpenedImage = imageLoaderService.LoadImage(filePath);
-            DisplayingImage = OpenedImage;
+            DisplayingImage = null;
         }
         catch (Exception exception)
         {
